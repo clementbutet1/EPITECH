@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2019
+## 107transfer.py
+## File description:
+## 107transfer.py
+##
+
+import sys
+import math
+import os
+import random
+
+def man_help():
+    print("USAGE");
+    print("    ./107transfer [num den]*\n");
+    print("DESCRIPTION");
+    print("    num     polynomial numerator defined by its coeficients");
+    print("    den     polynomial denominator defined by its coeficient");
+
+def valid_string(string):
+    i = 0
+    while (i < len(string)):
+        if (string[i] < '.' and string[i] >
+        '/' and string[i] < '0' or string[i] > '9'):
+            man_help()
+            exit(84)
+
+def condi(x, result):
+    print("%.3f" % x, "->", "%.5f" % result)
+
+def calcul():
+    if (sys.argv[1] == "-h"):
+        man_help()
+        exit(0)
+
+    a = 1
+    x = 0.0
+    result = 1.0
+    while (x < 1.001):
+        for a in range (1, ((len(sys.argv) - 1)), 2):
+            try:
+                num = [int(s) for s in sys.argv[a].split('*')]
+                denum = [int(s) for s in sys.argv[a + 1].split('*')]
+            except ValueError:
+                sys.stdout.write("Invalid argument\n");
+                exit(84)
+            if ((sum(denum[i] * x ** i for i in range(len(denum)))== 0)):
+                exit(84)
+            result = result * (sum(num[i] * x ** i for i in range(len(num)))
+            / sum(denum[i] * x ** i for i in range(len(denum))))
+        condi(x, result)
+        x += 0.001
+        a = 1
+        result = 1.0
+
+def main(string):
+    valid_string(string)
+
+if (len(sys.argv) >= 2 and (len(sys.argv) - 1) % 2 == 0):
+    calcul()     
+else:
+    man_help()
+    exit(84)

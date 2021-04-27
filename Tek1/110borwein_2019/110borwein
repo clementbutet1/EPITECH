@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2019
+## 110borwein
+## File description:
+## 110borwein
+##
+
+import sys
+import math
+import os
+import random
+import numpy as np
+from math import *
+
+def display_help():
+    print("USAGE")
+    print("           ./110borwein n\n")
+    print("DESCRIPTION")
+    print("           n     constant defining the integral to be computed")
+    exit(0)
+
+def valid_string(string):
+    for i in range (0, len(string), 1):
+        if (string[i] != '-' and (string[i] < '0' or string[i] > '9')):
+            exit(84)
+
+def midpoint(x):
+    res = 0
+    j = 0.5
+    a = 0
+    b = 5000
+    n = 10000
+    h = (b - a) / n
+    pi2 = pi / 2
+    for i in np.arange(0.5, 5000.5, 0.5):
+        k = i - 0.5
+        res5 = 1
+        if ((j + k) / 2) != 0:
+            for i in range(x + 1):
+                res5 = res5 * (sin(((j + k) / 2) / (2 * i + 1)) / (((j + k) / 2) / (2 * i + 1)))
+        res = res + res5
+        j += 0.5
+    res = res * h
+    print("Midpoint:")
+    print("I%d = %.10f" %(x, res))
+    if (res - pi2 > -0.0000000001 and res - pi2 < 0):
+        print("diff = 0.0000000000\n")
+    else:
+        print("diff = %.10f\n" % abs(res - pi2))
+
+def trapezoidal(x):
+    res = 0
+    a = 0
+    b = 5000
+    n = 10000
+    h = (b - a) / n
+    pi2 = pi / 2
+    for i in range(1, n):
+        k = a + i * h
+        if k == 0:
+            return 1
+        p = 1
+        for i in range(x + 1):
+            p = p * (sin(k / (2 * i + 1)) / (k / (2 * i + 1)))
+        res += p
+    res = res * 2
+    res3 = 1
+    if b != 0:
+        for i in range(x + 1):
+            res3 = res3 * (sin(b / (2 * i + 1)) / (b / (2 * i + 1)))
+    res4 = 1
+    if a != 0:
+        for i in range(x + 1):
+            res4 = res4 * (sin(a / (2 * i + 1)) / (a / (2 * i + 1)))
+    res = res + (res4 + res3)
+    res = res * (h / 2)
+    print("Trapezoidal:")
+    print("I%d = %.10f" %(x, res))
+    if (res - pi2 > -0.0000000001 and res - pi2 < 0):
+        print("diff = 0.0000000000\n")
+    else:
+        print("diff = %.10f\n" % abs(res - pi2))
+
+def simpson(x):
+    res1 = 0
+    res2 = 0
+    a = 0
+    b = 5000
+    n = 10000
+    h = (b - a) / n
+    pi2 = pi / 2
+    for i in range(0, n):
+        res6 = 1
+        if (a + i * h + h / 2) != 0:
+            for z in range(x + 1):
+                res6 = res6 * (sin((a + i * h + h / 2) / (2 * z + 1)) / ((a + i * h + h / 2) / (2 * z + 1)))
+        res1 += res6
+    res1 = res1 * 4
+    for i in range(1, n):
+        res7 = 1
+        if (a + i * h) != 0:
+            for z in range(x + 1):
+                res7 = res7 * (sin((a + i * h) / (2 * z + 1)) / ((a + i * h)/ (2 * z + 1)))
+        res2 += res7
+    res2 = res2 * 2
+    res = res1 + res2
+    res3 = 1
+    if b != 0:
+        for i in range(x + 1):
+            res3 = res3 * (sin(b / (2 * i + 1)) / (b / (2 * i + 1)))
+    res4 = 1
+    if a != 0:
+        for i in range(x + 1):
+            res4 = res4 * (sin(a / (2 * i + 1)) / (a / (2 * i + 1)))
+    res = res + (res4 + res3)
+    res = res * (h / 6)
+    print("Simpson:")
+    print("I%d = %.10f" %(x, res))
+    if (res - pi2 > -0.0000000001 and res - pi2 < 0):
+        print("diff = 0.0000000000")
+    else:
+        print("diff = %.10f" % abs(res - pi2))
+
+def main():
+    if (len(sys.argv) == 2):
+        if "--help" in sys.argv or "-h" in sys.argv:
+            display_help()
+        if (sys.argv[1].isdigit() == True):
+            valid_string(sys.argv[1])
+            x = int(sys.argv[1])
+            midpoint(x)
+            trapezoidal(x)
+            result = simpson(x)
+        else:
+            exit(84)
+    else:
+        exit(84)
+
+if __name__ == '__main__':
+    main()
+    sys.exit(0)

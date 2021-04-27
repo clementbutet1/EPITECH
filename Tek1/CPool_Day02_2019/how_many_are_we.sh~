@@ -1,0 +1,3 @@
+#!/bin/bash
+cat students.cvs 
+grep -Fci  $1

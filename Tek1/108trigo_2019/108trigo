@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2019
+## 107transfer.py
+## File description:
+## 107transfer.py
+##
+
+import sys
+import math
+
+def display_help():
+    print("USAGE")
+    print("    ./108trigo fun a0 a1 a2...\n")
+    print("DESCRIPTION\n")
+    print('    fun     function to be applied among at least "EXP", "COS", "SIN", "COSH" and "SINH"')
+    print("    tai     coeficients of the matrix")
+    sys.exit(0)
+
+def exp(tab):
+    tmp = []
+    for i in range(len(tab)):
+        ta = []
+        for j in range(len(tab)):
+            ta.append(1 if j == i else 0)
+        tmp.append(ta)
+    for i in range(1, 150):
+        tmp = add_mat(tmp, div(pow_mat(tab, i), math.factorial(i)))
+    return tmp
+
+def cos(tab):
+    tmp = []
+    for i in range(len(tab)):
+        ta = []
+        for j in range(len(tab)):
+            ta.append(1 if j == i else 0)
+        tmp.append(ta)
+    for i in range(1, 60):
+        if i % 2 == 0:
+            tmp = add_mat(tmp, div(pow_mat(tab, 2 * i), math.factorial(2 * i)))
+        else:
+            tmp = sub_mat(tmp, div(pow_mat(tab, 2 * i), math.factorial(2 * i)))
+    return tmp
+
+def sin(tab):
+    tmp = tab
+    for i in range(1, 60):
+        if i % 2 == 0:
+            tmp = add_mat(tmp, div(pow_mat(tab, 2 * i + 1), math.factorial(2 * i + 1)))
+        else:
+            tmp = sub_mat(tmp, div(pow_mat(tab, 2 * i + 1), math.factorial(2 * i + 1)))
+    return tmp
+
+def cosh(tab):
+    tmp = []
+    for i in range(len(tab)):
+        ta = []
+        for j in range(len(tab)):
+            ta.append(1 if j == i else 0)
+        tmp.append(ta)
+    for i in range(1, 60):
+        tmp = add_mat(tmp, div(pow_mat(tab, 2 * i), math.factorial(2 * i)))
+    return tmp
+
+def sinh(tab):
+    tmp = tab
+    for i in range(1, 60):
+        tmp = add_mat(tmp, div(pow_mat(tab, 2 * i + 1), math.factorial(2 * i + 1)))
+    return tmp
+
+def add_mat(mat1, mat2):
+    tmp = []
+    for i in range(len(mat1)):
+        c = []
+        for j in range(len(mat1[0])):
+            c.append(mat1[i][j] + mat2[i][j])
+        tmp.append(c)
+    return tmp
+
+def sub_mat(mat1, mat2):
+    tmp = []
+    for i in range(len(mat1)):
+        c = []
+        for j in range(len(mat1[0])):
+            c.append(mat1[i][j] - mat2[i][j])
+        tmp.append(c)
+    return tmp
+
+def pow_mat(mat, n):
+    tmp = mat
+    for i in range(n - 1):
+        mat1 = tmp
+        tmp = []
+        for i in range(len(mat1)):
+            tab = []
+            for j in range(len(mat[0])):
+                a = 0
+                for k in range(len(mat1[0])):
+                    a += mat1[i][k] * mat[k][j]
+                tab.append(a)
+            tmp.append(tab)
+    return tmp
+
+def div(mat, k):
+    if (k == 0):
+        sys.exit(84)
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            mat[i][j] /= k
+    return mat
+
+def init_funct():
+    tab = []
+    k = len(sys.argv) - 2
+    sqi = math.trunc(math.sqrt(k))
+    if math.trunc(math.sqrt(k)) ** 2 != k:
+        sys.exit(84)
+    for i in range(int(sqi)):
+        tab.append([])
+        for j in range(int(sqi)):
+            tab[i].append(sys.argv[i * int(sqi) + j + 2])
+    args = ["EXP", "COS", "SIN", "COSH", "SINH"]
+    fct_tab = [exp, cos, sin, cosh, sinh]
+    for i in range(len(fct_tab)):
+        if sys.argv[1] == args[i]:
+            tab = fct_tab[i](tab)
+    for i in range(len(tab)):
+        for j in range(len(tab[i])):
+            print("%.2f%c" % (tab[i][j],
+                              '\t' if (j != len(tab[i]) - 1) else '\n'),
+                  end="")
+
+def main():
+    if "--help" in sys.argv or "-h" in sys.argv:
+        display_help()
+    if len(sys.argv) <= 2 \
+            or sys.argv[1] not in ["EXP", "COS", "SIN", "COSH", "SINH"]:
+        sys.exit(84)
+    try:
+        for i in range(2, len(sys.argv)):
+            sys.argv[i] = float(sys.argv[i])
+    except ValueError:
+        display_help()
+    init_funct()
+
+if __name__ == '__main__':
+    try:
+        main()
+        sys.exit(0)
+    except Exception:
+        sys.exit(84)
